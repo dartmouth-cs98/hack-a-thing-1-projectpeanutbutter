@@ -1,1 +1,6 @@
-# cs98Hack-A-Thing
+# cs98HackAThing
+
+> Andrew Alini & John Kotz
+
+
+
