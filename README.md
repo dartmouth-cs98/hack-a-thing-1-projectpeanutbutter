@@ -3,16 +3,46 @@
 
 ### SpeechSummary
 
-'SpeechSummary.py' is a program that takes either a recording in a '.wav' or '.flac' file or a user input dication through
+'speechSummary.py' is a program that takes either a recording in a '.wav' or '.flac' file or a user input dication through
 the microphone and returns a summary of the dictation. This code uses watson developer cloud for speech recognition and 
 the NLTK package for summarizing the topic. John Kotz predominantly worked on Speech recongition code while Andrew Alini 
 predominantly worked on natural language processing. 'README.md' was written by both Alini and John.
 
-### Usage
+### Getting Started
+To get started, clone this repository and `cd` into the destination.
+First, make sure you have pip installed (instalation guide: `https://pip.pypa.io/en/stable/installing/`)
 
-(JOHN TODO)
+The easyest way to run this project is to use a virtual environment. Use this command to install `virtualenv`: (you might add sudo at the beginning if you run into problems)
+```bash
+pip install virtualenv
+```
+
+Setup the local virtual environment. This will create an env folder in the current directory which will act as your virtual environment:
+```bash
+python -m virtualenv env
+```
+
+Once that's done, just activate it and then install the python packages necesary:
+```
+source ./env/bin/activate
+pip install -r requirements.txt
+```
+
+Now you should be all set!
+
+> NOTE: to exit the virual environment, just execute the `deactivate` command
+
+#### Usage
+
+To run the code, run the following command while the virtual environment is activated:
+```bash
+python speechSummary.py
+```
+
 ### Examples
-(JOHN TODO)
+
+There are a bunch of `.wav` files in the examples folder. When you run the program, enter one of those example files (you may also need to enable USE_IBM in 'config.ini' if you are using any of those examples).
+
 ### Assumptions
 
 User is speaking clearly with minimal background noise. 

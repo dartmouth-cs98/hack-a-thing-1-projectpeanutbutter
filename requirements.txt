@@ -1,0 +1,4 @@
+nltk
+watson-developer-cloud
+ConfigParser
+requests
