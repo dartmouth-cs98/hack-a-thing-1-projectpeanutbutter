@@ -31,6 +31,8 @@ article_text = re.sub(r'\s+', ' ', article_text)
 formatted_article_text = re.sub('[^a-zA-Z]', ' ', article_text )  
 formatted_article_text = re.sub(r'\s+', ' ', formatted_article_text)  
 
+# Where we start
+
 sentence_list = nltk.sent_tokenize(article_text)
 
 stopwords = nltk.corpus.stopwords.words('english')
@@ -56,5 +58,5 @@ for sent in sentence_list:
 
 summary_sentences = heapq.nlargest(5, sentence_scores, key=sentence_scores.get)
 
-summary = ' '.join(summary_sentences)  
+summary = ' '.join(summary_sentences)
 print(summary)

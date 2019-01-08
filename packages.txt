@@ -5,3 +5,4 @@ beautifulsoup4
 lxml
 pylint
 SpeechRecognition
+watson_developer_cloud
