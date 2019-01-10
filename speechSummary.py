@@ -35,7 +35,7 @@ else:
 text = ''.join(transcripts)
 
 # Get rid a bunch of extranious characters
-text = text.replace('% HESITATION', '')
+text = text.replace('%HESITATION', '')
 text = re.sub(r'\[[0-9]*\]', ' ', text)  
 text = re.sub(r'\s+', ' ', text)  
 
