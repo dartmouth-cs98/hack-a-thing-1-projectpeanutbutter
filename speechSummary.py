@@ -9,13 +9,12 @@ API_KEY = config['API']['KEY']
 DO_SPEECH = bool(config['SPEECH']['USE_IBM'])
 NUM_SENTENCES = int(config['SUMAMRY']['NUM_SENTENCES'])
 
-# MARK: Get a WAV file
-fileName = raw_input("Enter a file name: ")
-
 # MARK: Convert from speech to text
 transcripts = []
 
 if DO_SPEECH:
+    # MARK: Get a WAV file
+    fileName = raw_input("Enter a file name: ")
     print('Processing audio')
     
     # Adapted from Watson example code: https://github.com/watson-developer-cloud/python-sdk/blob/master/examples/speech_to_text_v1.py
