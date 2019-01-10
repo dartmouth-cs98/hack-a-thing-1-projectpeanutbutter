@@ -1,14 +1,13 @@
 import nltk, requests, heapq, configparser, re
 from watson_developer_cloud import SpeechToTextV1
 from watson_developer_cloud.websocket import RecognizeCallback, AudioSource
-import math
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 API_KEY = config['API']['KEY']
-DO_SPEECH = int(config['SPEECH']['USE_IBM'])
-PERCENTILE = float(config['SUMAMRY']['PERCENTILE'])
+DO_SPEECH = bool(config['SPEECH']['USE_IBM'])
+NUM_SENTENCES = int(config['SUMAMRY']['NUM_SENTENCES'])
 
 # MARK: Get a WAV file
 fileName = raw_input("Enter a file name: ")
@@ -77,8 +76,7 @@ for sent in sentence_list:
                 else:
                     sentence_scores[sent] += word_frequencies[word]
 
-numSentences = int(math.ceil((1 - PERCENTILE) * len(sentence_scores)))
 # Get the top # of sentences
-summary_sentences = heapq.nlargest(numSentences, sentence_scores, key=sentence_scores.get)
+summary_sentences = heapq.nlargest(NUM_SENTENCES, sentence_scores, key=sentence_scores.get)
 summary = ' '.join(summary_sentences)
 print(summary)
