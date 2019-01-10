@@ -1,5 +1,5 @@
-# CS98 cs98HackAThing1
-## Andrew Alini, John Kotz, CS98 Winter 2019
+# CS98 cs98HackAThing1 (Winter 2019)
+> Andrew Alini, John Kotz
 
 ### SpeechSummary
 
