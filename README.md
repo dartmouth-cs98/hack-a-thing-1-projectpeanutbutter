@@ -62,3 +62,7 @@ The recognized text is passed on to the natural language processing section. Thi
 Unfortunately, the default Google Speech API seemed to have a maximum time limit on its use, so we spent a lot of time trying to figure out why it would only recognize some of the message.
 
 We also found that our chosen Speech-to-Text API (IBM Watson) would not insert punctuation in transcripts. Our NLP system requires punctuation to diliniate between sentences, so this was a major problem for our product. After some research we found an API that would allow us to post text and receive punctuated text, thus solving our problem.
+
+The code currently outputs a hard coded number of sentences in the summary. However, a longer passage will likely require more sentences to have a more accurate summary.
+We hoped to make this number a variable which could be calculated by getting the sentences with scores in the top 'x' percentile. However, this introduced bugs into the
+code and we ran out of time in trying to resolve the problems.
