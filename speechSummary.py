@@ -9,13 +9,12 @@ API_KEY = config['API']['KEY']
 DO_SPEECH = bool(config['SPEECH']['USE_IBM'])
 NUM_SENTENCES = int(config['SUMAMRY']['NUM_SENTENCES'])
 
-# MARK: Get a WAV file
-fileName = raw_input("Enter a file name: ")
-
 # MARK: Convert from speech to text
 transcripts = []
 
 if DO_SPEECH:
+    # MARK: Get a WAV file
+    fileName = raw_input("Enter a file name: ").strip()
     print('Processing audio')
     
     # Adapted from Watson example code: https://github.com/watson-developer-cloud/python-sdk/blob/master/examples/speech_to_text_v1.py
@@ -35,6 +34,11 @@ else:
 
 text = ''.join(transcripts)
 
+# Get rid a bunch of extranious characters
+text = text.replace('% HESITATION', '')
+text = re.sub(r'\[[0-9]*\]', ' ', text)  
+text = re.sub(r'\s+', ' ', text)  
+
 # MARK: Adding punctation
 print("Text received. Punctuating...")
 text = requests.post("http://bark.phon.ioc.ee/punctuator?text=" + text).text
@@ -44,10 +48,6 @@ print("==================================")
 
 # MARK: Summarize
 # Adapted from https://stackabuse.com/text-summarization-with-nltk-in-python/
-
-# Get rid a bunch of extranious characters
-text = re.sub(r'\[[0-9]*\]', ' ', text)  
-text = re.sub(r'\s+', ' ', text)  
 
 # Make a special version with no uppercase letters
 formatted_text = re.sub('[^a-zA-Z]', ' ', text)  
