@@ -1,44 +1,55 @@
 import nltk, requests, heapq, configparser, re
 from watson_developer_cloud import SpeechToTextV1
 from watson_developer_cloud.websocket import RecognizeCallback, AudioSource
-
+import bs4 as bs
+import math
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 API_KEY = config['API']['KEY']
-DO_SPEECH = bool(config['SPEECH']['USE_IBM'])
-NUM_SENTENCES = int(config['SUMAMRY']['NUM_SENTENCES'])
+DO_SPEECH = int(config['SPEECH']['USE_IBM'])
+PERCENTILE = float(config['SUMAMRY']['PERCENTILE'])
 
-# MARK: Get a WAV file
-fileName = raw_input("Enter a file name: ")
+# # MARK: Convert from speech to text
+# transcripts = []
 
-# MARK: Convert from speech to text
-transcripts = []
-
-if DO_SPEECH:
-    print('Processing audio')
+# if DO_SPEECH:
+#     # MARK: Get a WAV file
+#     fileName = raw_input("Enter a file name: ")
+#     print('Processing audio')
     
-    # Adapted from Watson example code: https://github.com/watson-developer-cloud/python-sdk/blob/master/examples/speech_to_text_v1.py
-    service = SpeechToTextV1(url="https://stream.watsonplatform.net/speech-to-text/api", iam_apikey=API_KEY)
+#     # Adapted from Watson example code: https://github.com/watson-developer-cloud/python-sdk/blob/master/examples/speech_to_text_v1.py
+#     service = SpeechToTextV1(url="https://stream.watsonplatform.net/speech-to-text/api", iam_apikey=API_KEY)
 
-    models = service.list_models().get_result()
-    model = service.get_model('en-US_BroadbandModel').get_result()
+#     models = service.list_models().get_result()
+#     model = service.get_model('en-US_BroadbandModel').get_result()
 
-    with open(fileName, 'rb') as audio_file:
-        recognition = service.recognize(audio=audio_file, content_type='audio/wav').get_result()
-    transcripts = list(map(lambda x: x['alternatives'][0]['transcript'], recognition["results"]))
-else:
-    transcripts = ['good evening my fellow citizens this government as promised has maintains the closest surveillance of the Soviet military buildup on the island of Cuba within the past week unmistakable evidence has established the fact that I see reserve offensive missile sites is now in preparation on the imprisoned island the purpose of these bases can be none other than to provide a nuclear strike capability against the western hemisphere ',
-        'upon receiving the first preliminary hard information of this nature last Tuesday morning at nine AM I directed that our surveillance be stepped up ',
-        'ends having now confirmed and completed our evaluation of the evidence and our decision on a course of action this government feels obliged to report this new crisis you in the fullest detail ',
-        'the characteristics of these new missile sites indicate two distinct type of insulations several of them include medium range ballistic missiles capable of carrying a nuclear warhead for a distance of more than one thousand knocked tore all miles ']
+#     with open(fileName, 'rb') as audio_file:
+#         recognition = service.recognize(audio=audio_file, content_type='audio/wav').get_result()
+#     transcripts = list(map(lambda x: x['alternatives'][0]['transcript'], recognition["results"]))
+# else:
+#     transcripts = ['good evening my fellow citizens this government as promised has maintains the closest surveillance of the Soviet military buildup on the island of Cuba within the past week unmistakable evidence has established the fact that I see reserve offensive missile sites is now in preparation on the imprisoned island the purpose of these bases can be none other than to provide a nuclear strike capability against the western hemisphere ',
+#         'upon receiving the first preliminary hard information of this nature last Tuesday morning at nine AM I directed that our surveillance be stepped up ',
+#         'ends having now confirmed and completed our evaluation of the evidence and our decision on a course of action this government feels obliged to report this new crisis you in the fullest detail ',
+#         'the characteristics of these new missile sites indicate two distinct type of insulations several of them include medium range ballistic missiles capable of carrying a nuclear warhead for a distance of more than one thousand knocked tore all miles ',
+#         'I really like peanut butter Peanut Butter has many positive qualities in life For example Peanut Butter has nutritional benefits such as curing cancer ebola aids and the bubonic plague Finally I think it is worthy to note the sexual importance of peanut butter Hot damn']
 
-text = ''.join(transcripts)
+# text = ''.join(transcripts)
 
-# MARK: Adding punctation
-print("Text received. Punctuating...")
-text = requests.post("http://bark.phon.ioc.ee/punctuator?text=" + text).text
-print(text)
+# # MARK: Adding punctation
+# print("Text received. Punctuating...")
+# text = requests.post("http://bark.phon.ioc.ee/punctuator?text=" + text).text
+scraped_data = requests.get('https://en.wikipedia.org/wiki/Artificial_intelligence').text
+parsed_article = bs.BeautifulSoup(scraped_data,'lxml')
+
+paragraphs = parsed_article.find_all('p')
+
+article_text = ""
+
+for p in paragraphs:  
+    article_text += p.text
+
+text = article_text
 
 print("==================================")
 
@@ -75,7 +86,9 @@ for sent in sentence_list:
                     sentence_scores[sent] = word_frequencies[word]
                 else:
                     sentence_scores[sent] += word_frequencies[word]
-
+                    
+NUM_SENTENCES=int(math.ceil((1-PERCENTILE)*len(sentence_scores)))
+print(NUM_SENTENCES)
 # Get the top # of sentences
 summary_sentences = heapq.nlargest(NUM_SENTENCES, sentence_scores, key=sentence_scores.get)
 summary = ' '.join(summary_sentences)
