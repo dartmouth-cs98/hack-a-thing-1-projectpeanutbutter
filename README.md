@@ -50,17 +50,15 @@ User has internet capability.
 User speaks within 100minutes as that is the maximum number of minutes per month for the watson developer cloud free account.
 
 ### What we learned
-We learned the basics of natural language processing and speech recognition. Natural Language Processing takes in text and breaks
-it down into its individual words. Then for summarizing a text, it finds the weighted frequency of each word. Ignoring things like
-stopwords, punctuation and etcetera, it then sums the weighted frequency to obtain the sentence score. it finally sorts the sentences
-based on score and returns the sentences with the top score as the summary of the original text.
+During what we call Project-Peanut-Butter learned the basics of natural language processing and speech recognition.
 
-(JOHN TODO)
+The first step for the summarization is the speech recognition. We use IBM Watson's API to analyze a sound file, split it into what it recognizes as words and make an 'educated' guess about the text form of the word. We then receive all those words strung together back from the API.
 
-> Peanut Butter is an excellent source of nutrition. In addition, there can be bugs in peanut butter which is an excellent source of protein.
-Overall, Peanut Butter should be in the diet of every american, unless allergic :'( 
+The recognized text is passed on to the natural language processing section. This breaks the text down into its individual words. It then finds the weighted frequency of each word, ignoring things like stopwords, punctuation etc., and sums the weighted frequency of the words in each sentence to obtain the sentence score. It finally sorts the sentences based on score and returns the sentences with the top score as the summary of the original text.
+
+> Peanut Butter is an excellent source of nutrition. In addition, there can be bugs in peanut butter which is an excellent source of protein. Overall, Peanut Butter should be in the diet of every american, unless allergic :'( 
+
 ### What didn't work
-google speech api didn't have enough time for recordings
+Unfortunately, the default Google Speech API seemed to have a maximum time limit on its use, so we spent a lot of time trying to figure out why it would only recognize some of the message.
 
-Discovered speech to text api would not insert api in transcripts. this is a problem because our nlp system requires punctuation for 
-diliniation between sentences and phrases. However, we recognized that we could fix this (JOHN KOTZ WRITE)
+We also found that our chosen Speech-to-Text API (IBM Watson) would not insert punctuation in transcripts. Our NLP system requires punctuation to diliniate between sentences, so this was a major problem for our product. After some research we found an API that would allow us to post text and receive punctuated text, thus solving our problem.
